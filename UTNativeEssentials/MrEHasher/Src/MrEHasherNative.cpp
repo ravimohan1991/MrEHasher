@@ -44,7 +44,7 @@ AMrEActor::AMrEActor()
 
 void AMrEActor::execGetCPUSerialNumber(FFrame& Stack, RESULT_DECL)
 {
-	guard(ACDDiscordActor::execTestFunction);
+	guard(AMrEActor::execGetCPUSerialNumber);
 	//P_GET_STR(S);//Get the first parameter
 	//P_GET_INT(I);//and the second
 	P_FINISH;//you MUST call this or it will crash.
