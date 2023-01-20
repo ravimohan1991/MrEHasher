@@ -64,9 +64,7 @@ void AMrEActor::execGetCPUSerialNumber(FFrame& Stack, RESULT_DECL)
 	else
 	{
 		GLog->Logf(TEXT("Couldn't get the relevant information. Contact the author!!"));
-		*(FString*)Result = "";
-
-		return;
+		CPUSn = "Not Available";
 	}
 
 	std::wstring WideCPUSn = std::wstring(CPUSn.begin(), CPUSn.end());

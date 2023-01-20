@@ -1,8 +1,8 @@
 /*
  *   --------------------------
- *  |  MrEmodMenuWindowFrame.uc
+ *  |  NPInfo.uc
  *   --------------------------
-*   This file is part of MrEHasher for UT99.
+ *   This file is part of MrEHasher for UT99.
  *
  *   MrEHasher is free software: you can redistribute and/or modify
  *   it under the terms of the Open Unreal Mod License version 1.1.
@@ -17,116 +17,88 @@
  *
  *   Timeline:
  *   January, 2023: Development begins
+ *
+ *   Relevant thread:
+ *   https://ut99.org/viewtopic.php?f=15&t=4172
  */
 
- class MrEmodMenuWindowFrame expands UWindowFramedWindow;
+ class NPInfo extends Actor;
 
- // INI variables
- var() config int Xpos;
- var() config int Ypos;
- var() config int Wpos;
- var() config int Hpos;
+ var string ModName;
+ var string ModDLLName;
+ var string ModSOName;
+ var string ModDLLLoaderName;
+ var string ModSOLoaderName;
+ var string ModPkgDescriptor;
+ var string ModLicense;
+ var string ModAuthor;
+ var string ModDesc;
+ var string ModDLLURL;
+ var string ModSOURL;
+ var string ConflictingClasses;
+ var string ConflictingActors;
+ var string ConflictingPackages;
+ var string RequiredActors;
+ var string RequiredPackages;
 
- function created()
+ function PostBeginPlay ()
  {
- 	super.created();
-
- 	bLeaveOnScreen = true;
- 	bStatusBar = true;
-
- 	bSizable = True;
- 	bMoving = true;
-
- 	MinWinWidth = 200;
- 	MinWinHeight = 100;
-
- 	SetSizePos();
-
- 	WindowTitle = "MrEHasher";
+ 	ModName = "MrEHasher";
+ 	ModDLLName = "MrEHasher.dll";
+ 	ModDLLLoaderName = "MrEHasherdll.u";
+ 	ModPkgDescriptor = "Mod to hash your Turing Machine electronics";
+ 	ModLicense = "";
+ 	ModAuthor = "The_Cowboy";
+ 	ModDesc = "An electronics-items' hashing utility";
+ 	ModDLLURL = "not yet";
+ 	ConflictingClasses = "";
+ 	RequiredActors = "";
+ 	RequiredPackages = "MrEHasher,MrEHasherdll";
  }
 
- function ResolutionChanged(float W, float H)
+ function string GetItemName (string FullName)
  {
-	SetSizePos();
-	Super.ResolutionChanged(W, H);
- }
-
- function SetSizePos()
- {
- 	CheckXY();
-
- 	if (WPos > 0 && HPos > 0)
+ 	switch (Caps(FullName))
  	{
- 		SetSize(WPos, HPos);
+ 		case "GETMODNAME":
+ 			return ModName;
+ 		case "GETMODDLLNAME":
+ 			return ModDLLName;
+ 		case "GETMODDLLLOADERNAME":
+ 			return ModDLLLoaderName;
+ 		case "GETMODAUTHOR":
+ 			return ModAuthor;
+ 		case "GETMODDESC":
+ 			return ModDesc;
+ 		case "GETMODDLLURL":
+ 			return ModDLLURL;
+ 		case "GETMODSONAME":
+ 			return ModSOName;
+ 		case "GETMODSOLOADERNAME":
+ 			return ModSOLoaderName;
+ 		case "GETMODSOURL":
+ 			return ModSOURL;
+ 		case "GETMODPKGDESC":
+ 			return ModPkgDescriptor;
+ 		case "GETMODLICENSECLASS":
+ 			return ModLicense;
+ 		case "GETCONFLICTINGCLASSES":
+ 			return ConflictingClasses;
+ 		case "GETCONFLICTINGACTORS":
+ 			return ConflictingActors;
+ 		case "GETCONFLICTINGPACKAGES":
+ 			return ConflictingPackages;
+ 		case "GETREQUIREDACTORS":
+ 			return RequiredActors;
+ 		case "GETREQUIREDPACKAGES":
+ 			return RequiredPackages;
  	}
- 	else
- 	{
- 		SetSize(WinWidth, WinHeight);
- 	}
-
- 	WinLeft = ((Root.WinWidth  - WinWidth)  / 100) * (Xpos);
- 	WinTop  = ((Root.WinHeight - WinHeight) / 100) * (Ypos);
+ 	return "";
  }
-
- function Resized()
- {
- 	if (ClientArea == None)
- 	{
- 		return;
- 	}
-
- 	if (!bLeaveOnscreen) // hackish way for detect first resize
- 		SetSizePos();
-
- 	Super.Resized();
- }
-
- function CheckXY()
- {
- 	if (Xpos < 0 || Xpos > 99)
- 	{
- 		Xpos = 50;
- 	}
-
- 	if (Ypos < 0 || Ypos > 99)
- 	{
- 		Ypos = 60;
- 	}
- }
-
- function Tick(float DeltaTime)
- {
- 	local int x, y;
-
- 	WPos = WinWidth;
- 	HPos = WinHeight;
-
- 	x = self.WinLeft / ((Root.WinWidth - WinWidth) / 100);
- 	y = self.WinTop / ((Root.WinHeight - WinHeight) / 100);
-
- 	if (Xpos != x || Ypos != y)
- 	{
- 		Xpos = x;
- 		Ypos = y;
- 	}
-
- 	Super.Tick(DeltaTime);
- }
-
-
- function Close(optional bool bByParent)
- {
- 	CheckXY();
- 	SaveConfig();
- 	Super.Close(bByParent);
- }
-
 
  defaultproperties
  {
- 	XPos=50
- 	YPos=50
- 	ClientClass=Class'MrEHashWindow'
+  bHidden=true
  }
 
 /*

@@ -41,7 +41,7 @@ class AMrEActor : public AActor
 {
 public:
 		DECLARE_FUNCTION(execGetCPUSerialNumber)
-		DECLARE_CLASS(AMrEActor, AActor, 0, ChatDiamond);
+		DECLARE_CLASS(AMrEActor, AActor, 0, MrEHasher);
 	AMrEActor();
 };
 
@@ -56,7 +56,7 @@ public:
 #endif
 
 #ifdef VERIFY_CLASS_SIZES
-VERIFY_CLASS_SIZE_NODIE(ACDDiscordActor)
+VERIFY_CLASS_SIZE_NODIE(AMrEActor)
 #endif // VERIFY_CLASS_SIZES
 
 /*
