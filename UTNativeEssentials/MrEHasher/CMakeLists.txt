@@ -7,7 +7,7 @@
 
 cmake_minimum_required(VERSION 3.0.0)
 
-project(MrEHasher)
+project(MrEHasher_Client)
 
 # From BiosReader's cmake
 # For complete list of Compiler IDs check output_required_files
@@ -60,13 +60,13 @@ file(GLOB MrE_SOURCECPP Src/*.cpp)
 
 file(GLOB MrE_SOURCEC Src/*.c)
 
-add_library(MrEHasher SHARED ${MrE_SOURCECPP} ${MrE_SOURCEC} ${MrE_HEADERS})
+add_library(MrEHasher_Client SHARED ${MrE_SOURCECPP} ${MrE_SOURCEC} ${MrE_HEADERS})
 
 
 if(WIN32)
-    target_link_libraries(MrEHasher PUBLIC Ws2_32.lib)
+    target_link_libraries(MrEHasher_Client PUBLIC Ws2_32.lib)
 elseif(APPLE)
-    target_link_libraries(MrEHasher PUBLIC ${CoreServices} ${IOKit})
+    target_link_libraries(MrEHasher_Client PUBLIC ${CoreServices} ${IOKit})
 elseif(UNIX AND NOT APPLE)
     #target_link_libraries(${APPLICATION_NAME} PUBLIC libcapng)
 endif()
@@ -77,7 +77,7 @@ endif()
 # Since I am a library coder here, I am the Producer
 # Rest of the Engine is Consumer here
 
-target_include_directories(MrEHasher
+target_include_directories(MrEHasher_Client
     PRIVATE
         # where the library itself will look for its internal headers
         ${CMAKE_CURRENT_SOURCE_DIR}/Inc
@@ -88,4 +88,4 @@ target_include_directories(MrEHasher
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-target_compile_definitions(MrEHasher PUBLIC MrEHasher)
+target_compile_definitions(MrEHasher_Client PUBLIC MrEHasher_Client)

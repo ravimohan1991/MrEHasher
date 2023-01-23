@@ -1,8 +1,8 @@
 /*
  *   --------------------------
- *  |  MrEmodMenuWindowFrame.uc
+ *  |  MrEActor.uc
  *   --------------------------
-*   This file is part of MrEHasher for UT99.
+ *   This file is part of MrEHasher for UT99.
  *
  *   MrEHasher is free software: you can redistribute and/or modify
  *   it under the terms of the Open Unreal Mod License version 1.1.
@@ -19,114 +19,54 @@
  *   January, 2023: Development begins
  */
 
- class MrEmodMenuWindowFrame expands UWindowFramedWindow;
+class MrEactor extends MrENative native noexport;
 
- // INI variables
- var() config int Xpos;
- var() config int Ypos;
- var() config int Wpos;
- var() config int Hpos;
-
- function created()
+ struct ClientInformation
  {
- 	super.created();
+ 	var string CPUSerial;
+ };
 
- 	bLeaveOnScreen = true;
- 	bStatusBar = true;
 
- 	bSizable = True;
- 	bMoving = true;
+/*
+ *******************************************************************************
+ * A native routine extracting CPU serial number
+ * The part of our mod's sauce.
+ *
+ * May be accomponied by OS check since currently I am only supporting Windows,
+ * meh and bah.
+ *******************************************************************************
+ */
 
- 	MinWinWidth = 200;
- 	MinWinHeight = 100;
+ native simulated final function string GetCPUSerialNumber();
 
- 	SetSizePos();
+ simulated function ReportInformation()
+ {
+ 	local ClientInformation ClientInfo;
 
- 	WindowTitle = "MrEHasher";
+ 	Log("Attempting to send information");
+
+ 	ClientInfo.CPUSerial = GetCPUSerialNumber();
+ 	SendInformationToServer(ClientInfo.CPUSerial);
  }
 
- function ResolutionChanged(float W, float H)
+ simulated function SendInformationToServer(string CPUID)
  {
-	SetSizePos();
-	Super.ResolutionChanged(W, H);
+ 	Mut.BroadcastMessage("Client information");
+ 	Mut.BroadcastMessage("CPU ID: " $ CPUID);
+ 	Mut.BroadcastMessage(class'MrEHash'.static.MD5(CPUID));
+ 	Log("server recieved CPUID " @ CPUID);
  }
 
- function SetSizePos()
+ simulated function PostBeginplay()
  {
- 	CheckXY();
+ 	super.PostBeginPlay();
 
- 	if (WPos > 0 && HPos > 0)
- 	{
- 		SetSize(WPos, HPos);
- 	}
- 	else
- 	{
- 		SetSize(WinWidth, WinHeight);
- 	}
-
- 	WinLeft = ((Root.WinWidth  - WinWidth)  / 100) * (Xpos);
- 	WinTop  = ((Root.WinHeight - WinHeight) / 100) * (Ypos);
+ 	SetTimer(0.5, false);
  }
 
- function Resized()
+ function Timer()
  {
- 	if (ClientArea == None)
- 	{
- 		return;
- 	}
-
- 	if (!bLeaveOnscreen) // hackish way for detect first resize
- 		SetSizePos();
-
- 	Super.Resized();
- }
-
- function CheckXY()
- {
- 	if (Xpos < 0 || Xpos > 99)
- 	{
- 		Xpos = 50;
- 	}
-
- 	if (Ypos < 0 || Ypos > 99)
- 	{
- 		Ypos = 60;
- 	}
- }
-
- function Tick(float DeltaTime)
- {
- 	local int x, y;
-
- 	WPos = WinWidth;
- 	HPos = WinHeight;
-
- 	x = self.WinLeft / ((Root.WinWidth - WinWidth) / 100);
- 	y = self.WinTop / ((Root.WinHeight - WinHeight) / 100);
-
- 	if (Xpos != x || Ypos != y)
- 	{
- 		Xpos = x;
- 		Ypos = y;
- 	}
-
- 	Super.Tick(DeltaTime);
- }
-
-
- function Close(optional bool bByParent)
- {
- 	CheckXY();
- 	SaveConfig();
- 	Super.Close(bByParent);
- }
-
-
- defaultproperties
- {
- 	XPos=50
- 	YPos=50
- 	ClientClass=Class'MrEHashWindow'
+     Destroy();
  }
 
 /*

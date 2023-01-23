@@ -1,6 +1,6 @@
 /*
  *   --------------------------
- *  |  MrEHashWindow.uc
+ *  |  MrEEventHandler.uc
  *   --------------------------
  *   This file is part of MrEHasher for UT99.
  *
@@ -17,67 +17,24 @@
  *
  *   Timeline:
  *   January, 2023: Development begins
+ *
+ *   Relevant thread:
+ *   https://ut99.org/viewtopic.php?f=15&t=4172
+ *
+ *   Thanks to Anthrax for NPLoader callback!!
  */
 
- class MrEHashWindow expands UWindowDialogClientWindow;
+class MrEEventHandler extends Actor;
 
- var MrEActor MyEHasher;
+var MrEMutator Mut;
 
- var string CPUSerial;
- var string CPUMD5Hash;
- var color BlackColor;
- var color PinkColor;
-
-
- function Created()
+ function string GetItemName(string FullName)
  {
- 	Super.Created();
-
- 	WinLeft = int(Root.WinWidth - WinWidth) / 2;
- 	WinTop = int(Root.WinHeight - WinHeight) / 2;
-
- 	MyEHasher = Root.GetPlayerOwner().Spawn(class'MrEActor', Root.GetPlayerOwner());
-
- 	CPUSerial = MyEHasher.GetCPUSerialNumber();
- 	CPUMD5Hash = class'MrEHash'.static.MD5(CPUSerial);
- }
-
-
- function Resized()
- {
- 	Super.Resized();
- }
-
-
- function Paint(Canvas C, float X, float Y)
- {
- 	local float TitleXLength, TitleYLength;
-
- 	Super.Paint(C, X, Y);
-
- 	C.TextSize(CPUSerial, TitleXLength, TitleYLength);
- 	C.SetPos((WinWidth * Root.GUIScale) / 2 - TitleXLength / 2, Root.GUIScale * WinHeight / 2 - TitleYLength / 2);
-
- 	C.DrawColor = BlackColor;
- 	C.DrawText(CPUSerial);
-
- 	C.TextSize(CPUMD5Hash, TitleXLength, TitleYLength);
- 	C.SetPos((WinWidth * Root.GUIScale) / 2 - TitleXLength / 2, Root.GUIScale * WinHeight / 2 + TitleYLength / 2);
-
- 	C.DrawColor = PinkColor;
- 	C.DrawText(CPUMD5Hash);
- }
-
-
- function Close(optional bool bByParent)
- {
- 	Super.Close(bByParent);
- }
-
- defaultproperties
- {
- 	PinkColor=(R=255,G=192,B=203)
- 	BlackColor=(R=0,G=0,B=0)
+ 	if(Left(FullName, 10) ~= "PLAYERJOIN")
+ 	{
+ 		Mut.NewPlayerNPLogin(int(mid(FullName, 11, 3)));
+ 	}
+ 	return "";
  }
 
 /*

@@ -1,6 +1,6 @@
 /*
  *   --------------------------
- *  |  MrEActor.uc
+ *  |  MrENative.uc
  *   --------------------------
  *   This file is part of MrEHasher for UT99.
  *
@@ -17,29 +17,25 @@
  *
  *   Timeline:
  *   January, 2023: Development begins
- */
-
-class MrEActor extends Actor native noexport;
-
- struct ClientInformation
- {
- 	var string CPUSerial;
- };
-
- var Mutator Mut;
-
-/*
- *******************************************************************************
- * A native routine extracting CPU serial number
- * The part of our mod's sauce.
  *
- * May be accomponied by OS check since currently I am only supporting Windows,
- * meh and bah.
+ *   Relevant thread:
+ *   https://ut99.org/viewtopic.php?f=15&t=4172
+ *
+ *   Thanks to Buggie for suggesting interfacing!!
+ */
+
+/*******************************************************************************
+ * Notes for compiling:
+ * 1. For compiling dependent package MrEHasher_Client (with class MrEActor)
+ *    set the flags to "class MrENative extends Actor native noexport"
+ * 2. For compiling just the MrEHasher package, remove "native noexport" flags
+ *
  *******************************************************************************
  */
 
- native final function string GetCPUSerialNumber();
+class MrENative extends Actor;
 
+ var MrEMutator Mut;
 
 /*
  *******************************************************************************
@@ -72,7 +68,7 @@ class MrEActor extends Actor native noexport;
  		SendInformationToServer;
  }
 
-/*
+ /*
  *******************************************************************************
  * For all practical purposes, we are on Client because Server called the
  * function via RPC as declared in Replication block.
@@ -84,10 +80,7 @@ class MrEActor extends Actor native noexport;
 
  simulated function ReportInformation()
  {
- 	local ClientInformation ClientInfo;
 
- 	ClientInfo.CPUSerial = GetCPUSerialNumber();
- 	SendInformationToServer(ClientInfo);
  }
 
 /*
@@ -99,13 +92,14 @@ class MrEActor extends Actor native noexport;
  *******************************************************************************
  */
 
- function SendInformationToServer(ClientInformation ClientInfo)
+ function SendInformationToServer(string CPUID)
  {
- 	Mut.BroadcastMessage("Client information");
-
- 	Mut.BroadcastMessage("CPU ID: " $ ClientInfo.CPUSerial);
- 	Mut.BroadcastMessage(class'MrEHash'.static.MD5(ClientInfo.CPUSerial));
  }
+
+
+defaultproperties
+{
+}
 
 /*
  *		                                  /\

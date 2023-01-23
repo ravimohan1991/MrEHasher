@@ -27,7 +27,13 @@ extern "C" {
 }
 
 
-IMPLEMENT_PACKAGE(MrEHasher);
+IMPLEMENT_PACKAGE(MrEHasher_Client);
+
+IMPLEMENT_CLASS(AMrENative);
+
+AMrENative::AMrENative()
+{
+}
 
 IMPLEMENT_CLASS(AMrEActor);
 

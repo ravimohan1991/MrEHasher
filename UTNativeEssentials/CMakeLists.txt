@@ -198,13 +198,13 @@ add_subdirectory(Engine)
 ################################################################################
 # Link Directories
 ################################################################################
-link_directories(MrEHasher Core/Lib Engine/Lib Window/Lib)
+link_directories(MrEHasher_Client Core/Lib Engine/Lib Window/Lib)
 
 ################################################################################
 # Target Definitions / Custom Modding Stuff
 ################################################################################
 add_subdirectory(MrEHasher)
-target_include_directories(MrEHasher
+target_include_directories(MrEHasher_Client
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/Engine/Inc)
@@ -213,6 +213,6 @@ target_include_directories(MrEHasher
 ################################################################################
 # Target Linking Rules
 ################################################################################
-target_link_libraries(MrEHasher PUBLIC Core Engine)
+target_link_libraries(MrEHasher_Client PUBLIC Core Engine)
 
 # end of CMakeLists.txt ...

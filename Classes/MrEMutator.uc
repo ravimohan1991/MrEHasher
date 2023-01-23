@@ -1,8 +1,8 @@
 /*
  *   --------------------------
- *  |  MrEmodMenuWindowFrame.uc
+ *  |  MrEMutator.uc
  *   --------------------------
-*   This file is part of MrEHasher for UT99.
+ *   This file is part of MrEHasher for UT99.
  *
  *   MrEHasher is free software: you can redistribute and/or modify
  *   it under the terms of the Open Unreal Mod License version 1.1.
@@ -21,39 +21,41 @@
 
 class MrEMutator extends Mutator;
 
- var MrEActor MyHasher;
-
  function PostBeginPlay()
  {
- 	Log("+----------------------------");
+ 	local MrEEventHandler Temp;
+ 	
+ 	Temp = Spawn(class'MrEEventHandler', self);
+ 	Temp.Mut = self;
+ 	Temp.Tag = 'NPLoader';
 
+ 	Log("+----------------------------");
  	Log("| Loaded MrEHasher!!");
  	Log("+----------------------------");
 
  	super.PostBeginPlay();
  }
 
-
- function Mutate(string MutateString, PlayerPawn Sender)
+ function NewPlayerNPLogin(int PlayerID)
  {
- 	if(MutateString ~= "showehash")
+ 	local PlayerPawn Lpp;
+ 	local class<MrENative> LMrE;
+ 	local MrENative TempMrE;
+
+ 	foreach AllActors(class'PlayerPawn', Lpp)
  	{
- 		if(MyHasher == none)
+ 		if(Lpp.PlayerReplicationInfo.PlayerID == PlayerID)
  		{
- 			MyHasher = Spawn(class'MrEActor', self);
- 			MyHasher.Mut = self;
+ 			break;
  		}
-
- 		MyHasher.ReportInformation();
-
- 		// We are destroying the actor because if active the next client connection
- 		// crashes with bind error. Not sure what am I missing, till I find that, this be the hack.  Also consult the readme
- 		MyHasher.Destroy();
  	}
 
- 	if ( NextMutator != None )
+ 	if(Lpp != none)
  	{
- 		NextMutator.Mutate(MutateString, Sender);
+ 		LMrE = class<MrENative>(DynamicLoadObject("MrEHasher_CLient.MrEActor", class'Class'));
+ 		TempMrE = Spawn(LMrE, Lpp);
+ 		TempMrE.Mut = self;
+ 		TempMrE.ReportInformation();
  	}
  }
 

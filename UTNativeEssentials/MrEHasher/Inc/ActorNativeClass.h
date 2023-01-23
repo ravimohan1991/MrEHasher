@@ -36,12 +36,17 @@
 #define AUTOGENERATE_FUNCTION(cls,idx,name)
 #endif
 
+class AMrENative : public AActor
+{
+	DECLARE_CLASS(AMrENative, AActor, 0, MrEHasher_Client);
+	AMrENative();
+};
 
-class AMrEActor : public AActor
+class AMrEActor : public AMrENative
 {
 public:
 		DECLARE_FUNCTION(execGetCPUSerialNumber)
-		DECLARE_CLASS(AMrEActor, AActor, 0, MrEHasher);
+		DECLARE_CLASS(AMrEActor, AMrENative, 0, MrEHasher_Client);
 	AMrEActor();
 };
 

@@ -44,8 +44,8 @@
  function PostBeginPlay ()
  {
  	ModName = "MrEHasher";
- 	ModDLLName = "MrEHasher.dll";
- 	ModDLLLoaderName = "MrEHasherdll.u";
+ 	ModDLLName = "MrEHasher_Client.dll";
+ 	ModDLLLoaderName = "MrEHasherdll_Client.u";
  	ModPkgDescriptor = "Mod to hash your Turing Machine electronics";
  	ModLicense = "";
  	ModAuthor = "The_Cowboy";
@@ -53,7 +53,7 @@
  	ModDLLURL = "not yet";
  	ConflictingClasses = "";
  	RequiredActors = "";
- 	RequiredPackages = "MrEHasher,MrEHasherdll";
+ 	RequiredPackages = "MrEHasher_Client,MrEHasherdll_Client";
  }
 
  function string GetItemName (string FullName)
@@ -98,7 +98,7 @@
 
  defaultproperties
  {
-  bHidden=true
+ 	bHidden=true
  }
 
 /*
