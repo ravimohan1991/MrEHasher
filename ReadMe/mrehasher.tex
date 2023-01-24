@@ -158,6 +158,37 @@ Discard this step if you have already installed latest ACE with NPLoader 19b.
 
 \end{itemize}
 
-Now to see the client's electronics' information, CPUID to be specific, type ``mutate showehash''.
+\section{Compiling}
+In this section, I shall explain how to compile MrEHasher from source in Windows.  Ensure that you have latest version of Microsoft Visual Studio and WotGreal (optional). The mod has 
+been split into two components
 
+\begin{itemize}
+\item Server Components
+\begin{itemize}
+\item \FileColor{MrEHasher.u}
+\item \FileColor{MrEHasher\_Client.dll}
+\item \FileColor{MrEHasher\_Client.u}
+\item \FileColor{MrEHasherdll\_Client.u}
+\end{itemize}
+\item Client Components
+\begin{itemize}
+\item \FileColor{MrEHasher\_Client.dll}
+\item \FileColor{MrEHasher\_Client.u}
+\item \FileColor{MrEHasherdll\_Client.u}
+\end{itemize}
+\end{itemize}
+
+\subsection{Few Words For Mod Authors}
+If the instructions of are not followed this way, an imminent crash, figure \ref{fig:nativebindcrash}, can be observed in some situations.  This is because ``ULinker'' can't find the relevant function declarations if the class has been already spwned on the server and client hasn't installed the mod, or, to be specific, \FileColor{MrEHasher\_Client.dll} yet.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{img_nativebindcrash}
+\caption{Crash notice}
+\label{fig:nativebindcrash}
+\end{figure}
+
+
+
+\section{Understanding Native Code}
 \end{document}
